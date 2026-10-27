@@ -1,0 +1,275 @@
+@import 'tailwindcss';
+
+/* "Card Room Riso" — tokens from the design canvas. */
+:root {
+  color-scheme: light;
+  --bg: #f1ece0;
+  --surface: #fbf8f1;
+  --surface2: #e6dfcf;
+  --ink: #1a1814;
+  --muted: #5b554a;
+  --line: #1a1814;
+  --felt: #1f5a47;
+  --felt-deep: #174636;
+  --felt-line: #5c907c;
+  --felt-ink: #f1ece0;
+  --primary: #c23b22;
+  --on-primary: #fbf8f1;
+  --yellow: #f2be2c;
+  --paper: #fbf8f1;
+  --sec-bg: #1a1814;
+  --sec-ink: #fbf8f1;
+  --shadow: #1a1814;
+  --input-bg: #fbf8f1;
+  --card-paper: #fbf8f1;
+  --card-ink: #1a1814;
+  --card-red: #d9442a;
+  --card-yellow: #f2be2c;
+  --ivory: #fbf8f1;
+  --bone: #f1ece0;
+  --stone: #5b554a;
+  --brick: #c23b22;
+}
+
+:root[data-theme='dark'] {
+  color-scheme: dark;
+  --bg: #14130f;
+  --surface: #1e1c17;
+  --surface2: #2a2721;
+  --ink: #f0e9da;
+  --muted: #a79f8e;
+  --line: #f0e9da;
+  --felt: #143d31;
+  --felt-deep: #0f2f26;
+  --felt-line: #3d6e5d;
+  --felt-ink: #f0e9da;
+  --primary: #f0603f;
+  --on-primary: #14130f;
+  --yellow: #f5c842;
+  --paper: #ece5d4;
+  --sec-bg: #f0e9da;
+  --sec-ink: #14130f;
+  --shadow: #f5c842;
+  --input-bg: #1e1c17;
+  --card-paper: #ece5d4;
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-surface2: var(--surface2);
+  --color-ink: var(--ink);
+  --color-muted: var(--muted);
+  --color-line: var(--line);
+  --color-felt: var(--felt);
+  --color-felt-deep: var(--felt-deep);
+  --color-felt-line: var(--felt-line);
+  --color-felt-ink: var(--felt-ink);
+  --color-primary: var(--primary);
+  --color-on-primary: var(--on-primary);
+  --color-yellow: var(--yellow);
+  --color-paper: var(--paper);
+  --color-sec-bg: var(--sec-bg);
+  --color-sec-ink: var(--sec-ink);
+  --color-input-bg: var(--input-bg);
+  --color-card-ink: var(--card-ink);
+  --color-ivory: var(--ivory);
+  --color-bone: var(--bone);
+  --color-stone: var(--stone);
+  --color-brick: var(--brick);
+  --font-display: var(--font-big-shoulders), 'Arial Narrow', sans-serif;
+  --font-sans: var(--font-familjen), system-ui, sans-serif;
+  --font-mono: var(--font-plex-mono), ui-monospace, monospace;
+}
+
+html,
+body {
+  background: var(--bg);
+  color: var(--ink);
+}
+
+body {
+  font-family: var(--font-familjen), system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+button,
+[role='button'],
+select {
+  cursor: pointer;
+}
+button:disabled {
+  cursor: default;
+}
+
+input::placeholder {
+  color: currentColor;
+  opacity: 0.55;
+}
+
+:focus-visible {
+  outline: 3px solid var(--yellow);
+  outline-offset: 2px;
+}
+
+/* felt table: riso dot grain */
+.felt {
+  background-color: var(--felt);
+  background-image: radial-gradient(rgba(0, 0, 0, 0.14) 1px, transparent 1.3px);
+  background-size: 6px 6px;
+  color: var(--felt-ink);
+}
+
+.hard-shadow {
+  box-shadow: 4px 4px 0 var(--shadow);
+}
+.hard-shadow-sm {
+  box-shadow: 3px 3px 0 var(--yellow);
+}
+
+/* ---------- motion ---------- */
+
+@keyframes pp-pulse {
+  0%,
+  100% {
+    opacity: 0.35;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+@keyframes pp-deal {
+  from {
+    transform: translateY(-18px) scale(0.86);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+  }
+}
+@keyframes pp-pop {
+  0% {
+    transform: scale(0.6);
+    opacity: 0;
+  }
+  60% {
+    transform: scale(1.06);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+@keyframes pp-stamp {
+  0% {
+    transform: scale(1.7) rotate(-12deg);
+    opacity: 0;
+  }
+  70% {
+    transform: scale(0.96) rotate(-3deg);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1) rotate(-4deg);
+    opacity: 1;
+  }
+}
+@keyframes pp-land {
+  0% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+@keyframes pp-swap {
+  0% {
+    transform: translateY(0) rotateY(0);
+  }
+  40% {
+    transform: translateY(-10px) rotateY(90deg);
+  }
+  100% {
+    transform: translateY(0) rotateY(0);
+  }
+}
+@keyframes pp-seat-in {
+  from {
+    transform: scale(0.85);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+@keyframes pp-count {
+  0% {
+    transform: scale(1.5);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.anim-deal {
+  animation: pp-deal 300ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+.anim-pop {
+  animation: pp-pop 300ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+.anim-stamp {
+  animation: pp-stamp 260ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+.anim-land {
+  animation: pp-land 140ms ease-out both;
+}
+.anim-swap {
+  animation: pp-swap 360ms cubic-bezier(0.45, 0, 0.2, 1) both;
+}
+.anim-seat-in {
+  animation: pp-seat-in 300ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+.anim-count {
+  animation: pp-count 240ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+.dot-pulse {
+  animation: pp-pulse 1.2s ease-in-out infinite;
+}
+
+.scroll-hidden {
+  scrollbar-width: none;
+}
+.scroll-hidden::-webkit-scrollbar {
+  display: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 1ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 150ms !important;
+    transition-delay: 0ms !important;
+    scroll-behavior: auto !important;
+  }
+  .dot-pulse {
+    animation: none;
+  }
+}
+
+/* jnnk logo: one asset per theme */
+.logo-dark {
+  display: none;
+}
+:root[data-theme='dark'] .logo-light {
+  display: none;
+}
+:root[data-theme='dark'] .logo-dark {
+  display: block;
+}

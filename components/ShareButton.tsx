@@ -1,0 +1,60 @@
+'use client';
+
+import { useEffect, useRef, useState } from 'react';
+import { copyToClipboard } from '@/lib/clipboard';
+import { useT } from '@/lib/use-translations';
+
+const CONFIRMATION_MS = 1800;
+
+export function ShareButton({ compact }: { compact: boolean }) {
+  const t = useT();
+  const [copied, setCopied] = useState(false);
+  const resetTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => () => void (resetTimer.current && clearTimeout(resetTimer.current)), []);
+
+  async function copyRoomLink() {
+    const link = `${window.location.origin}${window.location.pathname}`;
+    if (!(await copyToClipboard(link))) return;
+    setCopied(true);
+    if (resetTimer.current) clearTimeout(resetTimer.current);
+    resetTimer.current = setTimeout(() => setCopied(false), CONFIRMATION_MS);
+  }
+
+  return (
+    <>
+      <button
+        type="button"
+        onClick={copyRoomLink}
+        aria-label={t.room.copy}
+        className={`flex shrink-0 items-center justify-center gap-2 rounded-lg border-2 border-line bg-surface text-[15px] font-semibold text-ink ${
+          compact ? 'size-11' : 'h-10 px-3.5'
+        }`}
+      >
+        <svg
+          width="17"
+          height="17"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2.2"
+          strokeLinecap="round"
+          aria-hidden="true"
+        >
+          {copied ? (
+            <path d="M5 12.5l4.5 4.5L19 7.5" strokeLinejoin="round" />
+          ) : (
+            <>
+              <path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1" />
+              <path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1" />
+            </>
+          )}
+        </svg>
+        {!compact && <span className="whitespace-nowrap">{copied ? t.room.copied : t.room.copy}</span>}
+      </button>
+      <span role="status" className="sr-only">
+        {copied ? t.room.copied : ''}
+      </span>
+    </>
+  );
+}
