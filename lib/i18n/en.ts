@@ -65,7 +65,6 @@ export const en = {
     playAria: (v: string) => `Play ${v}`,
     abstainAria: 'Coffee break, abstain',
     coffee: 'Coffee',
-    quip: 'Need coffee first.',
     waitHost: 'The host starts the next round.',
     connecting: 'Connecting to the room…',
     connectingSub: 'Looking for the other players. This can take a few seconds.',

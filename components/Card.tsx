@@ -15,7 +15,6 @@ interface CardProps {
   icon?: CardIcon | null;
   selected?: boolean;
   label?: string;
-  quip?: string;
 }
 
 const BACK_DOT_PATTERN = 'radial-gradient(rgba(242,190,44,.5) .9px, transparent 1.25px)';
@@ -51,7 +50,7 @@ function edgeOf(face: CardFace, selected: boolean, small: boolean): Pick<CSSProp
   return { border: `${small ? 1.5 : 2}px solid var(--card-ink)`, boxShadow: RESTING_SHADOW };
 }
 
-export function Card({ face, w, value = '', icon, selected = false, label, quip }: CardProps) {
+export function Card({ face, w, value = '', icon, selected = false, label }: CardProps) {
   const { height, radius, small } = cardMetrics(w);
   return (
     <div
@@ -59,7 +58,7 @@ export function Card({ face, w, value = '', icon, selected = false, label, quip 
       style={{ width: w, height, borderRadius: radius, ...surfaceOf(face), ...edgeOf(face, selected, small) }}
     >
       {face === 'front' && <FrontFace value={value} width={w} />}
-      {face === 'abstain' && <AbstainFace width={w} label={label} quip={quip} />}
+      {face === 'abstain' && <AbstainFace width={w} label={label} />}
       {face === 'empty' && <EmptyFace width={w} />}
       {face === 'back' && icon && <BackFace icon={icon} width={w} />}
     </div>
@@ -71,12 +70,11 @@ interface ValueCardProps {
   w: number;
   selected?: boolean;
   label?: string;
-  quip?: string;
 }
 
-export function ValueCard({ value, w, selected, label, quip }: ValueCardProps) {
+export function ValueCard({ value, w, selected, label }: ValueCardProps) {
   return value === ABSTAIN ? (
-    <Card face="abstain" w={w} selected={selected} label={label} quip={quip} />
+    <Card face="abstain" w={w} selected={selected} label={label} />
   ) : (
     <Card face="front" w={w} value={value} selected={selected} />
   );

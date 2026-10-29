@@ -81,7 +81,7 @@ export function Hand({ deck, deckTitle, selected, locked, compact, onPick }: Han
               onClick={(event) => onPick(value, event.currentTarget.getBoundingClientRect())}
               className={`block shrink-0 snap-center rounded-[10px] border-0 bg-transparent p-0 transition-transform duration-150 ease-[cubic-bezier(.2,.8,.2,1)] active:scale-[.98] ${liftClass(isSelected, locked)}`}
             >
-              <ValueCard value={value} w={cardWidth} selected={isSelected} label={t.room.coffee} quip={t.room.quip} />
+              <ValueCard value={value} w={cardWidth} selected={isSelected} label={t.room.coffee} />
             </button>
           );
         })}

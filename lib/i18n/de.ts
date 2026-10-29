@@ -65,7 +65,6 @@ export const de: Translations = {
     playAria: (v: string) => `Karte ${v} spielen`,
     abstainAria: 'Kaffeepause, Enthaltung',
     coffee: 'Kaffee',
-    quip: 'Erst mal Kaffee.',
     waitHost: 'Der Host startet die nächste Runde.',
     connecting: 'Verbinde mit dem Raum …',
     connectingSub: 'Wir suchen die anderen Spielenden. Das kann ein paar Sekunden dauern.',

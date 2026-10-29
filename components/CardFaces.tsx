@@ -73,7 +73,7 @@ export function BackFace({ icon, width }: { icon: CardIcon; width: number }) {
   );
 }
 
-export function AbstainFace({ width, label, quip }: { width: number; label?: string; quip?: string }) {
+export function AbstainFace({ width, label }: { width: number; label?: string }) {
   const metrics = cardMetrics(width);
   const large = width >= 120;
   const iconSize = Math.round(width * (large ? 0.42 : 0.56));
@@ -88,11 +88,6 @@ export function AbstainFace({ width, label, quip }: { width: number; label?: str
           style={{ fontSize: Math.max(11, Math.round(metrics.numeral * 0.24)), letterSpacing: '.06em', lineHeight: 1 }}
         >
           {label}
-        </span>
-      )}
-      {quip && width >= 84 && (
-        <span className="max-w-[120px] text-center font-sans text-xs font-medium leading-tight text-(--card-ink)">
-          {quip}
         </span>
       )}
     </div>

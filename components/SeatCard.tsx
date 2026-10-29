@@ -76,7 +76,7 @@ export function SeatCard({ seat, width, index, seatCount, revealed, hidden, slot
           }}
         >
           <div style={{ position: 'absolute', inset: 0, backfaceVisibility: 'hidden' }}>
-            {frontMounted && <Front seat={seat} width={width} coffeeLabel={t.room.coffee} quip={t.room.quip} />}
+            {frontMounted && <Front seat={seat} width={width} coffeeLabel={t.room.coffee} />}
           </div>
           <div style={{ position: 'absolute', inset: 0, backfaceVisibility: 'hidden', transform: 'rotateY(180deg)' }}>
             <Card face="back" w={width} icon={seat.icon} />
@@ -87,18 +87,8 @@ export function SeatCard({ seat, width, index, seatCount, revealed, hidden, slot
   );
 }
 
-function Front({
-  seat,
-  width,
-  coffeeLabel,
-  quip,
-}: {
-  seat: SeatInfo;
-  width: number;
-  coffeeLabel: string;
-  quip: string;
-}) {
+function Front({ seat, width, coffeeLabel }: { seat: SeatInfo; width: number; coffeeLabel: string }) {
   if (seat.invalid) return <Card face="front" w={width} value="?" />;
-  if (seat.value === ABSTAIN) return <Card face="abstain" w={width} label={coffeeLabel} quip={quip} />;
+  if (seat.value === ABSTAIN) return <Card face="abstain" w={width} label={coffeeLabel} />;
   return <Card face="front" w={width} value={seat.value ?? ''} />;
 }
