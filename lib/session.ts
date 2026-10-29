@@ -2,6 +2,7 @@ import { buildSnapshot } from './build-snapshot';
 import { type Deck, getDeck } from './decks';
 import { HostElection } from './host';
 import { parseMsg } from './parse-msg';
+import { PeerDirectory } from './peer-directory';
 import {
   type CardIcon,
   type JoinMsg,
@@ -78,9 +79,7 @@ export class RoomSession {
   private sawPeer = false;
   private stopped = false;
 
-  private readonly cidByPeer = new Map<string, string>();
-  private readonly pendingRemoval = new Map<string, ReturnType<typeof setTimeout>>();
-  private readonly ignoreUntil = new Map<string, number>();
+  private readonly peers = new PeerDirectory();
   private readonly timeouts = new Set<ReturnType<typeof setTimeout>>();
   private intervals: ReturnType<typeof setInterval>[] = [];
   private phaseTimer: ReturnType<typeof setTimeout> | null = null;
@@ -154,7 +153,7 @@ export class RoomSession {
   kick(cid: string): void {
     if (!this.isHost || this.status !== 'ready' || cid === this.selfCid || !this.roster.has(cid)) return;
     this.send({ t: 'kick', target: cid });
-    this.ignoreUntil.set(cid, this.now() + KICK_IGNORE_MS);
+    this.peers.ignore(cid, this.now() + KICK_IGNORE_MS);
     this.removeMember(cid);
   }
 
@@ -172,8 +171,7 @@ export class RoomSession {
     this.intervals = [];
     this.timeouts.forEach(clearTimeout);
     this.timeouts.clear();
-    this.pendingRemoval.forEach(clearTimeout);
-    this.pendingRemoval.clear();
+    this.peers.cancelAllRemovals();
     if (this.phaseTimer) clearTimeout(this.phaseTimer);
     void Promise.resolve(this.transport.disconnect()).catch(() => undefined);
   }
@@ -261,48 +259,24 @@ export class RoomSession {
 
   // A reload reconnects with a new peer id, so removal waits briefly before it counts.
   private handlePeerLeave(peerId: string): void {
-    const cid = this.cidByPeer.get(peerId);
-    this.cidByPeer.delete(peerId);
+    const cid = this.peers.unbind(peerId);
     if (!cid || cid === this.selfCid) return;
-    this.cancelPendingRemoval(cid);
-    this.pendingRemoval.set(
-      cid,
-      setTimeout(() => {
-        this.pendingRemoval.delete(cid);
-        const stillConnected = [...this.cidByPeer.values()].includes(cid);
-        if (!this.stopped && !stillConnected) this.removeMember(cid);
-      }, this.timing.peerLeaveGraceMs),
-    );
-  }
-
-  private cancelPendingRemoval(cid: string): void {
-    const timer = this.pendingRemoval.get(cid);
-    if (timer) clearTimeout(timer);
-    this.pendingRemoval.delete(cid);
+    this.peers.scheduleRemoval(cid, this.timing.peerLeaveGraceMs, () => {
+      if (!this.stopped && !this.peers.isConnected(cid)) this.removeMember(cid);
+    });
   }
 
   private handleMessage(data: unknown, peerId: string): void {
     if (this.stopped || this.status === 'removed' || this.status === 'not-found') return;
     const message = parseMsg(data);
-    if (!message || message.from === this.selfCid || this.isIgnored(message)) return;
+    if (!message || message.from === this.selfCid) return;
+    if (this.peers.shouldIgnore(message.from, this.now(), message.t === 'join')) return;
 
-    this.cidByPeer.set(peerId, message.from);
-    this.cancelPendingRemoval(message.from);
+    this.peers.bind(peerId, message.from);
     this.roster.touch(message.from, this.now());
 
     this.applyMessage(message);
     if (!this.stopped) this.evaluate();
-  }
-
-  // A just-kicked client may still send for a moment; only a fresh join is accepted.
-  private isIgnored(message: Msg): boolean {
-    const until = this.ignoreUntil.get(message.from);
-    if (until === undefined) return false;
-    if (message.t === 'join' || this.now() >= until) {
-      this.ignoreUntil.delete(message.from);
-      return false;
-    }
-    return true;
   }
 
   private applyMessage(message: Msg): void {
@@ -334,7 +308,7 @@ export class RoomSession {
       case 'kick':
         if (from !== this.host.cid) break;
         if (message.target === this.selfCid) return this.markRemoved();
-        this.ignoreUntil.set(message.target, this.now() + KICK_IGNORE_MS);
+        this.peers.ignore(message.target, this.now() + KICK_IGNORE_MS);
         this.removeMember(message.target);
         break;
       case 'leave':
@@ -348,8 +322,7 @@ export class RoomSession {
 
   private removeMember(cid: string): void {
     if (!this.roster.remove(cid)) return;
-    this.cancelPendingRemoval(cid);
-    for (const [peerId, memberCid] of this.cidByPeer) if (memberCid === cid) this.cidByPeer.delete(peerId);
+    this.peers.forget(cid);
     if (cid === this.host.cid) this.electHost();
     this.evaluate();
   }

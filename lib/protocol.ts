@@ -1,5 +1,4 @@
 import type { DeckId } from './decks';
-import { isDeckId } from './decks';
 
 export const PROTOCOL_VERSION = 1;
 
