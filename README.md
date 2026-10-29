@@ -1,5 +1,8 @@
 # Planning Poker
 
+[![Live demo](https://img.shields.io/website?url=https%3A%2F%2Fplanning-poker.pngrtz.com&label=live%20demo&up_message=online&down_message=offline)](https://planning-poker.pngrtz.com)
+[![Deployed on Vercel](https://img.shields.io/badge/deployed%20on-Vercel-black?logo=vercel)](https://planning-poker.pngrtz.com)
+
 Scrum estimation. Open a room, share the link, deal the cards.
 
 There is no server and no database: the room lives in the participants' browsers and is synchronised peer-to-peer
