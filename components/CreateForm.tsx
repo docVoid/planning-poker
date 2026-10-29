@@ -6,6 +6,7 @@ import { DEFAULT_DECK, type DeckId } from '@/lib/decks';
 import { MAX_NAME_LENGTH, MAX_ROOM_NAME_LENGTH, createRoomCode, sanitizeName, sanitizeRoomName } from '@/lib/ids';
 import { useT } from '@/lib/use-translations';
 import { rememberName, storeCreateConfig } from '@/lib/join-handover';
+import { Button } from './Button';
 import { DeckPicker } from './DeckPicker';
 import { TextField } from './TextField';
 
@@ -79,12 +80,9 @@ export function CreateForm() {
       <DeckPicker value={deck} onChange={setDeck} />
 
       <div>
-        <button
-          type="submit"
-          className="h-14 rounded-lg border-2 border-card-ink bg-primary px-8 text-lg font-bold text-on-primary shadow-[4px_4px_0_var(--card-ink)]"
-        >
+        <Button type="submit" size="lg">
           {t.home.createBtn}
-        </button>
+        </Button>
       </div>
     </form>
   );

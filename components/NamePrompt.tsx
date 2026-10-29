@@ -5,8 +5,9 @@ import { useId, useState } from 'react';
 import { MAX_NAME_LENGTH, formatRoomCode, sanitizeName } from '@/lib/ids';
 import { useT } from '@/lib/use-translations';
 import type { RoomConfig } from '@/lib/protocol';
+import { Button } from './Button';
 import { CardFan } from './CardFan';
-import { SiteHeader } from './Header';
+import { SiteHeader } from './SiteHeader';
 import { TextField } from './TextField';
 
 interface NamePromptProps {
@@ -66,13 +67,9 @@ export function NamePrompt({ code, peek, onSubmit }: NamePromptProps) {
               autoComplete="nickname"
               autoFocus
             />
-            <button
-              type="submit"
-              disabled={!cleanName}
-              className="h-14 rounded-lg border-2 border-card-ink bg-primary text-lg font-bold text-on-primary shadow-[4px_4px_0_var(--shadow)] disabled:opacity-60"
-            >
+            <Button type="submit" size="lg" disabled={!cleanName}>
               {t.invite.btn}
-            </button>
+            </Button>
             <Link href="/" className="self-center text-sm text-ink underline underline-offset-[3px]">
               {t.invite.other}
             </Link>

@@ -1,10 +1,10 @@
 'use client';
 
-import Link from 'next/link';
 import { useT } from '@/lib/use-translations';
+import { Button, LinkButton } from './Button';
 import { Card } from './Card';
 import { CardFan } from './CardFan';
-import { SiteHeader } from './Header';
+import { SiteHeader } from './SiteHeader';
 
 export type StateKind = 'removed' | 'notfound' | 'connecting';
 
@@ -55,20 +55,13 @@ export function StateScreen({ kind, onPrimary }: { kind: StateKind; onPrimary?: 
           <p className="max-w-[460px] text-lg leading-relaxed text-pretty">{text.body}</p>
           <div className="mt-2 flex flex-wrap gap-3">
             {text.primary && (
-              <button
-                type="button"
-                onClick={onPrimary}
-                className="h-[54px] rounded-lg border-2 border-card-ink bg-primary px-6 text-[17px] font-bold text-on-primary shadow-[4px_4px_0_var(--shadow)]"
-              >
+              <Button size="lg" onClick={onPrimary}>
                 {text.primary}
-              </button>
+              </Button>
             )}
-            <Link
-              href="/"
-              className="flex h-[54px] items-center justify-center rounded-lg border-2 border-line px-5 text-[17px] font-semibold text-ink"
-            >
+            <LinkButton href="/" size="lg">
               {t.states.backHome}
-            </Link>
+            </LinkButton>
           </div>
         </div>
       </main>

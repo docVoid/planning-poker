@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { copyToClipboard } from '@/lib/clipboard';
 import { useT } from '@/lib/use-translations';
+import { CheckIcon, LinkIcon } from './Icons';
 
 const CONFIRMATION_MS = 1800;
 
@@ -31,25 +32,7 @@ export function ShareButton({ compact }: { compact: boolean }) {
           compact ? 'size-11' : 'h-10 px-3.5'
         }`}
       >
-        <svg
-          width="17"
-          height="17"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2.2"
-          strokeLinecap="round"
-          aria-hidden="true"
-        >
-          {copied ? (
-            <path d="M5 12.5l4.5 4.5L19 7.5" strokeLinejoin="round" />
-          ) : (
-            <>
-              <path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1" />
-              <path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1" />
-            </>
-          )}
-        </svg>
+        {copied ? <CheckIcon size={17} strokeWidth={2.2} /> : <LinkIcon size={17} strokeWidth={2.2} />}
         {!compact && <span className="whitespace-nowrap">{copied ? t.room.copied : t.room.copy}</span>}
       </button>
       <span role="status" className="sr-only">

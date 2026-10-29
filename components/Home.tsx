@@ -2,7 +2,7 @@
 
 import { useT } from '@/lib/use-translations';
 import { CreateForm } from './CreateForm';
-import { SiteHeader } from './Header';
+import { SiteHeader } from './SiteHeader';
 import { JoinForm } from './JoinForm';
 import { Hydrated } from './Providers';
 

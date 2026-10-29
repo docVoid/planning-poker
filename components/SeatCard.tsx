@@ -1,6 +1,6 @@
 'use client';
 
-import { type RefObject, useRef } from 'react';
+import { type RefObject, useState } from 'react';
 import { ABSTAIN } from '@/lib/decks';
 import { useLingering } from '@/lib/hooks';
 import { useT } from '@/lib/use-translations';
@@ -26,12 +26,12 @@ interface SeatCardProps {
 }
 
 function useVoteAnimation(commit: string | null): string {
-  const seen = useRef({ commit: null as string | null, animation: '' });
-  if (seen.current.commit !== commit) {
-    const animation = commit ? (seen.current.commit ? 'anim-swap' : 'anim-deal') : '';
-    seen.current = { commit, animation };
+  const [seen, setSeen] = useState({ commit, animation: commit ? 'anim-deal' : '' });
+  if (seen.commit !== commit) {
+    const animation = commit ? (seen.commit ? 'anim-swap' : 'anim-deal') : '';
+    setSeen({ commit, animation });
   }
-  return seen.current.animation;
+  return seen.animation;
 }
 
 export function SeatCard({ seat, width, index, seatCount, revealed, hidden, slotRef }: SeatCardProps) {
