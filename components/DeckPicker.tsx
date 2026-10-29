@@ -4,6 +4,7 @@ import { useId } from 'react';
 import { DECKS, type Deck, type DeckId } from '@/lib/decks';
 import { useT } from '@/lib/use-translations';
 import { Card } from './Card';
+import { CheckIcon } from './Icons';
 
 const PREVIEW_CARD_WIDTH = 30;
 const PREVIEW_POSES = [
@@ -58,19 +59,7 @@ function DeckTile({ deck, title, groupName, selected, onSelect }: DeckTileProps)
       <input type="radio" name={groupName} value={deck.id} checked={selected} onChange={onSelect} className="sr-only" />
       {selected && (
         <span className="absolute -right-3 -top-3 grid size-[30px] place-items-center rounded-full border-2 border-card-ink bg-primary">
-          <svg
-            width="16"
-            height="16"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="var(--on-primary)"
-            strokeWidth="3.2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            aria-hidden="true"
-          >
-            <path d="M5 12.5l4.5 4.5L19 7.5" />
-          </svg>
+          <CheckIcon size={16} strokeWidth={3.2} color="var(--on-primary)" />
         </span>
       )}
       <div className="relative flex h-[78px] items-center justify-center" aria-hidden="true">

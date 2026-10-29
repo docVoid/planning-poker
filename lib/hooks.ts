@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useLayoutEffect, useRef, useState } from 'react';
+import { type RefObject, useEffect, useLayoutEffect, useRef, useState } from 'react';
 
 export function useElementSize<T extends HTMLElement>() {
   const ref = useRef<T>(null);
@@ -36,7 +36,6 @@ export function useNow(intervalMs: number | null): number {
   const [now, setNow] = useState(() => Date.now());
   useEffect(() => {
     if (intervalMs === null) return;
-    setNow(Date.now());
     const timer = setInterval(() => setNow(Date.now()), intervalMs);
     return () => clearInterval(timer);
   }, [intervalMs]);
@@ -44,14 +43,29 @@ export function useNow(intervalMs: number | null): number {
 }
 
 export function useLingering(active: boolean, lingerMs: number): boolean {
-  const [lingering, setLingering] = useState(active);
+  const [visible, setVisible] = useState(active);
+  if (active && !visible) setVisible(true);
   useEffect(() => {
-    if (active) {
-      setLingering(true);
-      return;
-    }
-    const timer = setTimeout(() => setLingering(false), lingerMs);
+    if (active) return;
+    const timer = setTimeout(() => setVisible(false), lingerMs);
     return () => clearTimeout(timer);
   }, [active, lingerMs]);
-  return active || lingering;
+  return active || visible;
+}
+
+/** Calls `onDismiss` on Escape or a pointer press outside `containerRef`, while `active`. */
+export function useDismiss(active: boolean, containerRef: RefObject<HTMLElement | null>, onDismiss: () => void) {
+  useEffect(() => {
+    if (!active) return;
+    const dismissOutside = (event: PointerEvent) => {
+      if (!containerRef.current?.contains(event.target as Node)) onDismiss();
+    };
+    const dismissOnEscape = (event: KeyboardEvent) => event.key === 'Escape' && onDismiss();
+    document.addEventListener('pointerdown', dismissOutside);
+    document.addEventListener('keydown', dismissOnEscape);
+    return () => {
+      document.removeEventListener('pointerdown', dismissOutside);
+      document.removeEventListener('keydown', dismissOnEscape);
+    };
+  }, [active, containerRef, onDismiss]);
 }

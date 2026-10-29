@@ -1,6 +1,6 @@
 'use client';
 
-import { type RefObject, useLayoutEffect, useRef } from 'react';
+import { type RefObject, useEffect, useLayoutEffect, useRef } from 'react';
 import { cardMetrics } from '@/lib/card-metrics';
 import type { CardIcon } from '@/lib/protocol';
 import { Card, ValueCard } from './Card';
@@ -44,7 +44,9 @@ export function FlyingCard({ flight, targetRef, onDone }: FlyingCardProps) {
   const flightRef = useRef<HTMLDivElement>(null);
   const turnRef = useRef<HTMLDivElement>(null);
   const onDoneRef = useRef(onDone);
-  onDoneRef.current = onDone;
+  useEffect(() => {
+    onDoneRef.current = onDone;
+  });
   const width = Math.round(flight.from.width);
   const { height } = cardMetrics(width);
 

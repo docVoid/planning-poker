@@ -35,6 +35,7 @@ npm run dev
 | `npm run build`     | Production build                                       |
 | `npm test`          | Unit tests and room logic against an in-memory network |
 | `npm run typecheck` | TypeScript check                                       |
+| `npm run lint`      | ESLint                                                 |
 | `npm run format`    | Format the code with Prettier                          |
 
 ## How it works

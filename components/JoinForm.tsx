@@ -5,6 +5,7 @@ import { useId, useState } from 'react';
 import { MAX_NAME_LENGTH, parseRoomCode, sanitizeName } from '@/lib/ids';
 import { useT } from '@/lib/use-translations';
 import { rememberName } from '@/lib/join-handover';
+import { Button } from './Button';
 import { TextField } from './TextField';
 
 type FieldError = 'code' | 'name' | null;
@@ -67,12 +68,9 @@ export function JoinForm() {
           {error === 'code' ? t.home.errCode : t.home.errName}
         </p>
       )}
-      <button
-        type="submit"
-        className="hard-shadow-sm mt-1 h-[52px] rounded-lg border-2 border-line bg-sec-bg text-[17px] font-bold text-sec-ink"
-      >
+      <Button type="submit" variant="secondary" size="lg" className="mt-1">
         {t.home.joinBtn}
-      </button>
+      </Button>
     </form>
   );
 }

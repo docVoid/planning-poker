@@ -2,6 +2,8 @@
 
 import { useT } from '@/lib/use-translations';
 import type { RoomSnapshot } from '@/lib/snapshot';
+import { Button } from './Button';
+import { RefreshIcon } from './Icons';
 import { ResultBar } from './ResultBar';
 
 interface StatusBarProps {
@@ -20,35 +22,16 @@ export function NewRoundButton({
   block?: boolean;
 }) {
   const t = useT();
-  const size = block
-    ? 'h-12 w-full text-base'
-    : primary
-      ? 'h-[52px] px-[26px] text-[17px]'
-      : 'h-12 px-[22px] text-base';
-  const tone = primary
-    ? 'border-card-ink bg-primary text-on-primary shadow-[4px_4px_0_var(--shadow)]'
-    : 'hard-shadow-sm border-line bg-sec-bg text-sec-ink';
   return (
-    <button
-      type="button"
+    <Button
+      variant={primary ? 'primary' : 'secondary'}
+      size={primary && !block ? 'lg' : 'md'}
+      className={block ? 'w-full' : ''}
       onClick={onClick}
-      className={`flex shrink-0 items-center justify-center gap-2.5 whitespace-nowrap rounded-lg border-2 font-bold ${size} ${tone}`}
     >
-      <svg
-        width="18"
-        height="18"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="2.4"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        aria-hidden="true"
-      >
-        <path d="M20 11a8 8 0 1 0-2.3 5.7M20 4v7h-7" />
-      </svg>
+      <RefreshIcon size={18} strokeWidth={2.4} />
       {t.room.newRound}
-    </button>
+    </Button>
   );
 }
 

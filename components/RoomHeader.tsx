@@ -1,7 +1,10 @@
 'use client';
 
 import { useT } from '@/lib/use-translations';
-import { LanguageSwitch, Logo, ThemeSwitch } from './Header';
+import { PeopleIcon } from './Icons';
+import { LanguageSwitch } from './LanguageSwitch';
+import { Logo } from './Logo';
+import { ThemeSwitch } from './ThemeSwitch';
 import { ShareButton } from './ShareButton';
 
 interface RoomHeaderProps {
@@ -25,18 +28,7 @@ export function RoomHeader({ name, count, compact }: RoomHeaderProps) {
         </h1>
         {!compact && (
           <span className="inline-flex h-[30px] shrink-0 items-center gap-1.5 whitespace-nowrap rounded border-[1.5px] border-line px-2.5 text-sm font-semibold">
-            <svg
-              width="15"
-              height="15"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2.2"
-              aria-hidden="true"
-            >
-              <circle cx="9" cy="8" r="3.5" />
-              <path d="M2.5 20c.5-3.5 3-5.5 6.5-5.5s6 2 6.5 5.5M16 4.8a3.4 3.4 0 0 1 0 6.4M18.5 14.8c1.8.8 2.8 2.6 3 5.2" />
-            </svg>
+            <PeopleIcon size={15} strokeWidth={2.2} />
             {t.room.players(count)}
           </span>
         )}
