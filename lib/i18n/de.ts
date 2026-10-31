@@ -16,7 +16,7 @@ export const de: Translations = {
     joinTitle: 'Raum beitreten',
     joinBtn: 'Beitreten',
     code: 'Raumcode',
-    codePh: 'z. B. 3F9A1C07',
+    codePh: 'z.B. 3F9A1C07',
     name: 'Dein Name',
     namePh: 'Wie sollen wir dich nennen?',
     createTitle: 'Raum erstellen',
