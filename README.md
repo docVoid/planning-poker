@@ -8,6 +8,8 @@ Scrum estimation. Open a room, share the link, deal the cards.
 There is no server and no database: the room lives in the participants' browsers and is synchronised peer-to-peer
 over WebRTC. When the last person leaves, the room is gone.
 
+<img src="public/planning-poker-cover-light.png"/>
+
 ## Features
 
 - Rooms with a shareable link, 8-character hex room codes
