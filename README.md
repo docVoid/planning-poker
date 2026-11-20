@@ -5,8 +5,10 @@
 
 Scrum estimation. Open a room, share the link, deal the cards.
 
-There is no server and no database: the room lives in the participants' browsers and is synchronised peer-to-peer
-over WebRTC. When the last person leaves, the room is gone.
+There is no database: a room only exists while people are in it. The browsers talk to each other through a tiny
+WebSocket relay (`server/`, a Cloudflare Worker with one Durable Object per room) that forwards messages and keeps
+no state. It only needs outgoing HTTPS/WSS, so it works from company networks, hotspots and mobile data alike. When
+the last person leaves, the room is gone.
 
 <img src="public/planning-poker-cover-light.png"/>
 
@@ -21,24 +23,37 @@ over WebRTC. When the last person leaves, the room is gone.
 
 ## Stack
 
-Next.js (App Router), TypeScript, Tailwind CSS, Zustand, [Trystero](https://github.com/dmotz/trystero) for WebRTC
-signalling.
+Next.js (App Router), TypeScript, Tailwind CSS, Zustand. The relay in `server/` runs on Cloudflare Workers + Durable Objects.
 
 ## Getting started
 
 ```bash
 npm install
-npm run dev
+npm --prefix server install
+npm run dev:server   # relay on ws://localhost:8787
+npm run dev          # app on http://localhost:3000
 ```
 
-| Script              | Purpose                                                |
-| ------------------- | ------------------------------------------------------ |
-| `npm run dev`       | Development server on http://localhost:3000            |
-| `npm run build`     | Production build                                       |
-| `npm test`          | Unit tests and room logic against an in-memory network |
-| `npm run typecheck` | TypeScript check                                       |
-| `npm run lint`      | ESLint                                                 |
-| `npm run format`    | Format the code with Prettier                          |
+| Script                     | Purpose                                                |
+| -------------------------- | ------------------------------------------------------ |
+| `npm run dev`              | Development server on http://localhost:3000            |
+| `npm run dev:server`       | Relay server on ws://localhost:8787 (wrangler)         |
+| `npm run build`            | Production build                                       |
+| `npm test`                 | Unit tests and room logic against an in-memory network |
+| `npm run typecheck`        | TypeScript check                                       |
+| `npm run typecheck:server` | TypeScript check of the relay                          |
+| `npm run lint`             | ESLint                                                 |
+| `npm run format`           | Format the code with Prettier                          |
+
+## Deploying the relay
+
+The app stays on Vercel; only `server/` goes to Cloudflare.
+
+1. `cd server && npx wrangler login && npx wrangler deploy` once. Wrangler prints the `*.workers.dev` URL.
+2. In `server/wrangler.jsonc` set `ALLOWED_ORIGINS` to the origin of the app (localhost is always allowed).
+3. In Vercel set `NEXT_PUBLIC_RELAY_URL` to `wss://<relay-host>` and redeploy.
+4. For automatic deploys add the repository secrets `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID`; the
+   workflow in `.github/workflows/relay.yml` then deploys on every push to `main` that touches `server/`.
 
 ## How it works
 

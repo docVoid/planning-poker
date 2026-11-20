@@ -1,0 +1,16 @@
+{
+  "name": "planning-poker-relay",
+  "version": "1.0.0",
+  "private": true,
+  "description": "WebSocket relay for planning-poker rooms (Cloudflare Worker + Durable Object).",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^5.20261118.1",
+    "typescript": "^6.0.3",
+    "wrangler": "^4.0.0"
+  }
+}
