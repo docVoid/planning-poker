@@ -3,10 +3,10 @@
   "main": "src/index.ts",
   "compatibility_date": "2025-09-01",
   "durable_objects": {
-    "bindings": [{ "name": "ROOM", "class_name": "Room" }],
+    "bindings": [{ "name": "ROOM", "class_name": "Room" }]
   },
   "migrations": [{ "tag": "v1", "new_sqlite_classes": ["Room"] }],
   "vars": {
-    "ALLOWED_ORIGINS": "https://planning-poker.pngrtz.com",
-  },
+    "ALLOWED_ORIGINS": "https://planning-poker.pngrtz.com"
+  }
 }
