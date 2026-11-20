@@ -6,3 +6,8 @@ next-env.d.ts
 .env*.local
 .claude/
 .vercel
+
+# Cloudflare relay
+server/.wrangler
+server/node_modules
+.wrangler-dev*.log

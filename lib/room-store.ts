@@ -6,7 +6,7 @@ import { getClientId, isValidRoomCode } from './ids';
 import { consumeCreateConfig } from './join-handover';
 import { RoomSession } from './session';
 import type { RoomSnapshot } from './snapshot';
-import { createTrysteroTransport } from './sync';
+import { createRelayTransport } from './sync';
 import { createSessionVoteStorage } from './vote-storage';
 
 interface RoomStore {
@@ -24,7 +24,7 @@ export function useRoomSession(code: string, name: string, attempt: number, obse
       code,
       selfCid: getClientId(),
       name,
-      transport: createTrysteroTransport(code),
+      transport: createRelayTransport(code),
       createConfig: observer ? undefined : consumeCreateConfig(code),
       observer,
       storage: createSessionVoteStorage(code),
