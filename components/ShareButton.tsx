@@ -1,43 +1,71 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
-import { copyToClipboard } from '@/lib/clipboard';
+import dynamic from 'next/dynamic';
+import { type ReactNode, useState } from 'react';
+import { roomUrl, showShareSheet, useHasSystemShareSheet } from '@/lib/share';
 import { useT } from '@/lib/use-translations';
-import { CheckIcon, LinkIcon } from './Icons';
+import { QrIcon, ShareIcon } from './Icons';
 
-const CONFIRMATION_MS = 1800;
+const InviteDialog = dynamic(() => import('./InviteDialog').then((module) => module.InviteDialog));
 
-export function ShareButton({ compact }: { compact: boolean }) {
+interface ShareButtonProps {
+  roomName: string;
+  compact: boolean;
+}
+
+export function ShareButton({ roomName, compact }: ShareButtonProps) {
   const t = useT();
-  const [copied, setCopied] = useState(false);
-  const resetTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const hasSystemShareSheet = useHasSystemShareSheet();
+  const [inviteUrl, setInviteUrl] = useState<string | null>(null);
 
-  useEffect(() => () => void (resetTimer.current && clearTimeout(resetTimer.current)), []);
+  const openInviteDialog = () => setInviteUrl(roomUrl());
 
-  async function copyRoomLink() {
-    const link = `${window.location.origin}${window.location.pathname}`;
-    if (!(await copyToClipboard(link))) return;
-    setCopied(true);
-    if (resetTimer.current) clearTimeout(resetTimer.current);
-    resetTimer.current = setTimeout(() => setCopied(false), CONFIRMATION_MS);
+  async function openShareSheet() {
+    const url = roomUrl();
+    const shown = await showShareSheet({ title: roomName, text: t.share.message(roomName), url });
+    if (!shown) setInviteUrl(url);
   }
 
   return (
     <>
-      <button
-        type="button"
-        onClick={copyRoomLink}
-        aria-label={t.room.copy}
-        className={`flex shrink-0 items-center justify-center gap-2 rounded-lg border-2 border-line bg-surface text-[15px] font-semibold text-ink ${
-          compact ? 'size-11' : 'h-10 px-3.5'
-        }`}
-      >
-        {copied ? <CheckIcon size={17} strokeWidth={2.2} /> : <LinkIcon size={17} strokeWidth={2.2} />}
-        {!compact && <span className="whitespace-nowrap">{copied ? t.room.copied : t.room.copy}</span>}
-      </button>
-      <span role="status" className="sr-only">
-        {copied ? t.room.copied : ''}
-      </span>
+      <ActionButton
+        label={t.share.invite}
+        icon={<ShareIcon size={18} strokeWidth={2.2} />}
+        iconOnly={compact || hasSystemShareSheet}
+        onClick={hasSystemShareSheet ? openShareSheet : openInviteDialog}
+      />
+      {hasSystemShareSheet && (
+        <ActionButton
+          label={t.share.showQr}
+          icon={<QrIcon size={18} strokeWidth={2.2} />}
+          iconOnly
+          onClick={openInviteDialog}
+        />
+      )}
+      {inviteUrl && <InviteDialog url={inviteUrl} roomName={roomName} onClosed={() => setInviteUrl(null)} />}
     </>
+  );
+}
+
+interface ActionButtonProps {
+  label: string;
+  icon: ReactNode;
+  iconOnly: boolean;
+  onClick: () => void;
+}
+
+function ActionButton({ label, icon, iconOnly, onClick }: ActionButtonProps) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      aria-label={label}
+      className={`flex shrink-0 items-center justify-center gap-2 rounded-lg border-2 border-line bg-surface text-[15px] font-semibold text-ink ${
+        iconOnly ? 'size-11' : 'h-10 px-3.5'
+      }`}
+    >
+      {icon}
+      {!iconOnly && <span className="whitespace-nowrap">{label}</span>}
+    </button>
   );
 }

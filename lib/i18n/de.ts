@@ -36,10 +36,18 @@ export const de: Translations = {
     btn: 'Platz nehmen',
     other: 'Nicht für dich? Eigenen Raum starten',
   },
-  room: {
-    players: (n: number) => (n === 1 ? '1 Person' : `${n} Personen`),
+  share: {
+    invite: 'Einladen',
+    showQr: 'QR-Code anzeigen',
+    title: 'Mitspieler einladen',
+    scan: 'Mit der Handykamera scannen und beitreten',
     copy: 'Link kopieren',
     copied: 'Link kopiert',
+    close: 'Schließen',
+    message: (room: string) => `Komm in meinen Planning-Poker-Raum „${room}“`,
+  },
+  room: {
+    players: (n: number) => (n === 1 ? '1 Person' : `${n} Personen`),
     waiting: 'Warten auf die anderen',
     votedOf: (n: number, total: number) => `${n} von ${total} haben gewählt`,
     revealing: 'Alle haben gewählt — wird aufgedeckt',

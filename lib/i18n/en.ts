@@ -36,10 +36,18 @@ export const en = {
     btn: 'Take a seat',
     other: 'Not for you? Start your own room',
   },
-  room: {
-    players: (n: number) => (n === 1 ? '1 player' : `${n} players`),
+  share: {
+    invite: 'Invite',
+    showQr: 'Show QR code',
+    title: 'Invite players',
+    scan: 'Scan with a phone camera to join',
     copy: 'Copy link',
     copied: 'Link copied',
+    close: 'Close',
+    message: (room: string) => `Join my planning poker room “${room}”`,
+  },
+  room: {
+    players: (n: number) => (n === 1 ? '1 player' : `${n} players`),
     waiting: 'Waiting for others',
     votedOf: (n: number, total: number) => `${n} of ${total} voted`,
     revealing: 'Everyone has voted — revealing',
