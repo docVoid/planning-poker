@@ -1,10 +1,12 @@
 'use client';
 
+import dynamic from 'next/dynamic';
 import { type ReactNode, useState } from 'react';
 import { roomUrl, showShareSheet, useHasSystemShareSheet } from '@/lib/share';
 import { useT } from '@/lib/use-translations';
 import { QrIcon, ShareIcon } from './Icons';
-import { InviteDialog } from './InviteDialog';
+
+const InviteDialog = dynamic(() => import('./InviteDialog').then((module) => module.InviteDialog));
 
 interface ShareButtonProps {
   roomName: string;
@@ -40,7 +42,7 @@ export function ShareButton({ roomName, compact }: ShareButtonProps) {
           onClick={openInviteDialog}
         />
       )}
-      <InviteDialog url={inviteUrl} roomName={roomName} onClose={() => setInviteUrl(null)} />
+      {inviteUrl && <InviteDialog url={inviteUrl} roomName={roomName} onClosed={() => setInviteUrl(null)} />}
     </>
   );
 }

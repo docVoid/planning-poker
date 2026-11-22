@@ -9,59 +9,55 @@ import { QrCode } from './QrCode';
 const CONFIRMATION_MS = 1800;
 
 interface InviteDialogProps {
-  url: string | null;
+  url: string;
   roomName: string;
-  onClose: () => void;
+  onClosed: () => void;
 }
 
-export function InviteDialog({ url, roomName, onClose }: InviteDialogProps) {
+export function InviteDialog({ url, roomName, onClosed }: InviteDialogProps) {
   const t = useT();
   const titleId = useId();
   const dialogRef = useRef<HTMLDialogElement>(null);
-  const open = url !== null;
+  const close = () => dialogRef.current?.close();
 
   useEffect(() => {
     const dialog = dialogRef.current;
-    if (!dialog || open === dialog.open) return;
-    if (open) dialog.showModal();
-    else dialog.close();
-  }, [open]);
+    if (dialog && !dialog.open) dialog.showModal();
+  }, []);
 
   return (
     <dialog
       ref={dialogRef}
       aria-labelledby={titleId}
-      onClose={onClose}
-      onClick={(event) => event.target === event.currentTarget && onClose()}
+      onClose={onClosed}
+      onClick={(event) => event.target === event.currentTarget && close()}
       className="m-0 mt-auto w-full max-w-none overflow-y-auto rounded-t-[28px] border-2 border-b-0 border-line bg-surface p-0 text-ink backdrop:bg-black/55 sm:m-auto sm:max-w-[420px] sm:rounded-[28px] sm:border-b-2 sm:shadow-[6px_6px_0_var(--shadow)]"
     >
-      {url !== null && (
-        <div className="flex flex-col gap-4 p-5 pb-6 sm:p-6">
-          <div className="flex items-start justify-between gap-3">
-            <div className="min-w-0">
-              <h2 id={titleId} className="font-display text-[32px] font-black uppercase leading-none">
-                {t.share.title}
-              </h2>
-              <p className="mt-1.5 truncate text-[15px] text-muted">{roomName}</p>
-            </div>
-            <button
-              type="button"
-              onClick={onClose}
-              aria-label={t.share.close}
-              className="grid size-11 shrink-0 place-items-center rounded-full border-2 border-line"
-            >
-              <CrossIcon size={18} strokeWidth={2.4} />
-            </button>
+      <div className="flex flex-col gap-4 p-5 pb-6 sm:p-6">
+        <div className="flex items-start justify-between gap-3">
+          <div className="min-w-0">
+            <h2 id={titleId} className="font-display text-[32px] font-black uppercase leading-none">
+              {t.share.title}
+            </h2>
+            <p className="mt-1.5 truncate text-[15px] text-muted">{roomName}</p>
           </div>
-          <div className="felt flex justify-center rounded-2xl border-2 border-line px-4 py-7">
-            <div className="anim-deal aspect-square w-full max-w-[232px] -rotate-2 rounded-xl border-2 border-card-ink bg-paper p-1.5 shadow-[4px_4px_0_var(--yellow)]">
-              <QrCode value={url} />
-            </div>
-          </div>
-          <p className="text-center text-sm text-muted">{t.share.scan}</p>
-          <CopyLinkRow url={url} />
+          <button
+            type="button"
+            onClick={close}
+            aria-label={t.share.close}
+            className="grid size-11 shrink-0 place-items-center rounded-full border-2 border-line"
+          >
+            <CrossIcon size={18} strokeWidth={2.4} />
+          </button>
         </div>
-      )}
+        <div className="felt flex justify-center rounded-2xl border-2 border-line px-4 py-7">
+          <div className="anim-deal aspect-square w-full max-w-[232px] -rotate-2 rounded-xl border-2 border-card-ink bg-paper p-1.5 shadow-[4px_4px_0_var(--yellow)]">
+            <QrCode value={url} />
+          </div>
+        </div>
+        <p className="text-center text-sm text-muted">{t.share.scan}</p>
+        <CopyLinkRow url={url} />
+      </div>
     </dialog>
   );
 }
