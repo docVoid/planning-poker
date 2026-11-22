@@ -43,6 +43,21 @@ export const LinkIcon = (props: IconProps) => (
   </Icon>
 );
 
+export const ShareIcon = (props: IconProps) => (
+  <Icon {...props}>
+    <path d="M12 15V3M7.5 7.5L12 3l4.5 4.5M5 12v6.5A1.5 1.5 0 0 0 6.5 20h11a1.5 1.5 0 0 0 1.5-1.5V12" />
+  </Icon>
+);
+
+export const QrIcon = (props: IconProps) => (
+  <Icon {...props}>
+    <rect x="3.5" y="3.5" width="7" height="7" rx="1" />
+    <rect x="13.5" y="3.5" width="7" height="7" rx="1" />
+    <rect x="3.5" y="13.5" width="7" height="7" rx="1" />
+    <path d="M14 14h2.5v2.5M20.5 14v.01M14 20.5h2.5M20.5 17v3.5" />
+  </Icon>
+);
+
 export const RefreshIcon = (props: IconProps) => (
   <Icon {...props}>
     <path d="M20 11a8 8 0 1 0-2.3 5.7M20 4v7h-7" />

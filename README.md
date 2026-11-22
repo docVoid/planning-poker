@@ -14,7 +14,7 @@ the last person leaves, the room is gone.
 
 ## Features
 
-- Rooms with a shareable link, 8-character hex room codes
+- Rooms with a shareable link, 8-character hex room codes; invite via QR code, copy link, or the system share sheet on phones
 - Five fixed decks: Fibonacci, modified Fibonacci, T-shirt sizes, powers of two, linear (1–10), each with an abstain card
 - Votes stay secret until everybody has voted (commit-reveal), then the table is revealed automatically
 - Lowest, highest and average once revealed; consensus is highlighted
